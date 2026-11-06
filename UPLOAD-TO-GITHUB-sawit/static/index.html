@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sawit — Malaysian stocks, reports & ESG</title>
+<meta name="description" content="Search any Bursa Malaysia listed company: financials, official report links, governance facts and ESG disclosure guidance.">
+<meta name="theme-color" content="#fbfbfd">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="ambient"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">S</span>
+      <span class="brand-text">Sawit</span>
+    </a>
+    <nav class="topnav">
+      <a href="#search-anchor">Search</a>
+      <a href="#compare">Compare</a>
+      <a href="#esg">ESG</a>
+      <button class="icon-btn" id="themeBtn" aria-label="Switch appearance">
+        <svg class="icon"><use href="#i-sun"></use></svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="search-anchor">
+    <h1 class="hero-title">Bursa.<br><span class="grad">Beautifully clear.</span></h1>
+    <p class="hero-sub">Every Malaysian listed company. Its numbers, its reports, its record — all in one place.</p>
+
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg class="icon search-icon"><use href="#i-search"></use></svg>
+        <input id="q" type="search" placeholder="Search a company or code" aria-label="Search a company or code" autocomplete="off" spellcheck="false">
+        <button id="go" class="btn-primary" aria-label="Search"><svg class="icon"><use href="#i-arrow"></use></svg></button>
+      </div>
+      <ul id="suggestions" class="suggestions" hidden></ul>
+    </div>
+
+    <div class="try-row">
+      <div id="popular" class="chips"></div>
+    </div>
+
+    <div class="stats" id="stats">
+      <div><b>Bursa</b><span>MAIN · ACE · LEAP</span></div>
+      <div><b>4</b><span>Report sources</span></div>
+      <div><b>16</b><span>ESG checks</span></div>
+      <div><b>5</b><span>Compare at once</span></div>
+    </div>
+  </section>
+
+  <section id="loading" class="loading" hidden>
+    <div class="skeleton sk-head"></div>
+    <div class="sk-grid"><div class="skeleton sk-panel"></div><div class="skeleton sk-panel"></div></div>
+    <p class="loading-note">Fetching company data from Bursa and Yahoo Finance…</p>
+  </section>
+
+  <section id="error" class="error-panel" hidden>
+    <h2 id="errorTitle">Could not load that company.</h2>
+    <p id="errorMessage"></p>
+  </section>
+
+  <section id="results" hidden>
+    <div class="company-head">
+      <div class="code-badge" id="codeBadge">1155</div>
+      <div class="head-main">
+        <div class="head-meta"><span id="ticker">1155.KL</span><span>·</span><span id="exchange">Bursa</span><span id="sectorPill" class="pill"></span></div>
+        <h2 id="companyName">Company</h2>
+        <p class="sub" id="companySub"></p>
+      </div>
+      <div class="head-actions">
+        <a id="bursaLink" class="ghost-btn" target="_blank" rel="noopener">Bursa page<svg class="icon"><use href="#i-external"></use></svg></a>
+        <a id="siteLink" class="ghost-btn" target="_blank" rel="noopener">Website<svg class="icon"><use href="#i-external"></use></svg></a>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-head"><h3>Snapshot</h3><span class="panel-tag" id="priceTag"></span></div>
+        <div class="price-row">
+          <div class="big-price" id="bigPrice">—</div>
+          <div class="price-side"><span id="changePct" class="change">—</span><span class="muted" id="range52">—</span></div>
+        </div>
+        <div class="spark"><canvas id="spark" height="90"></canvas></div>
+        <div class="stat-grid" id="statGrid"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h3>Reports</h3><span class="panel-tag">Official sources</span></div>
+        <p class="panel-note">Sawit links to the authoritative documents rather than mirroring them. Open a link to read the real filing.</p>
+        <ul id="reportList" class="report-list"></ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>What the reports should answer</h3><span class="panel-tag">ESG disclosure</span></div>
+      <p class="panel-note" id="esgNote"></p>
+      <div id="esgPanels" class="esg-panels"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>Governance facts</h3><span class="panel-tag" id="govTag"></span></div>
+      <ul id="govFacts" class="fact-list"></ul>
+      <div id="officerGrid" class="officer-grid"></div>
+      <p class="panel-note">Facts only, as disclosed. Sawit does not rate people.</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>About</h3><span class="panel-tag">Profile</span></div>
+      <p id="aboutText" class="about-text"></p>
+    </div>
+  </section>
+
+  <section id="compare" class="section-block">
+    <div class="section-head">
+      <h2 class="section-title">Compare.<br><span class="grad">Side by side.</span></h2>
+      <p class="section-sub">Same metrics for every company, so gaps stand out next to strengths.</p>
+    </div>
+    <div class="compare-bar">
+      <input id="compareInput" type="text" placeholder="1155, 1295, 5347" aria-label="Stock codes to compare" spellcheck="false">
+      <button id="compareGo" class="btn-primary">Compare</button>
+    </div>
+    <div id="compareOut"></div>
+  </section>
+
+  <section id="esg" class="section-block">
+    <div class="section-head">
+      <h2 class="section-title">Sustainability.<br><span class="grad">Know what to look for.</span></h2>
+      <p class="section-sub">Bursa requires sustainability reporting, but depth varies enormously. Each item below names the document that should hold the answer — so you can check a report rather than skim it.</p>
+    </div>
+    <div id="esgGuide" class="esg-guide"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-brand">Sawit</p>
+    <p class="fine">Data from Yahoo Finance public endpoints and Bursa Malaysia links. Sawit is not affiliated with Bursa Malaysia or any company listed here. Nothing here is investment advice. Reports are the company's own disclosures — read the document before drawing conclusions.</p>
+  </div>
+</footer>
+
+<svg style="display:none">
+  <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V7z"/><path d="M14 3v4h4"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20c8 0 16-4 16-16-8 0-16 4-16 16z"/><path d="M4 20c0-6 4-10 10-12"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 5.2a3.2 3.2 0 0 1 0 5.6M17.5 14.4A6 6 0 0 1 22 20"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+</svg>
+
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>
